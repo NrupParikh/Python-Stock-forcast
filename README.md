@@ -1,5 +1,12 @@
-# 🧠 Stock Forecast App
+---
+title: Stock Forecast App
+emoji: 📈
+colorFrom: green
+colorTo: green
+sdk: docker
+pinned: false
+license: mit
+short_description: Stock Prediction using Flask framework
+---
 
-A Flask web app that predicts future stock prices using Yahoo Finance data and Random Forest Regression.
-
-## Run Locally
+Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
