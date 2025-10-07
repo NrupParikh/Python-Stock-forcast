@@ -242,3 +242,6 @@ if __name__ == "__main__":
 
     # Run using public IP
     app.run(host="0.0.0.0", port=5000, debug=True)
+
+    # Hugging Face uses port 7860 by default
+    # app.run(host="0.0.0.0", port=7860)
