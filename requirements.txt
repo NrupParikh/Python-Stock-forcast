@@ -1,5 +1,17 @@
+# Web Framework: The lightweight framework for building the application structure (routes, views, etc.)
 flask
+
+# Production Server: A critical component for deployment. Used by Docker to serve the Flask app live on Hugging Face Spaces.
+gunicorn
+
+# Data Acquisition: Used to download historical stock data from Yahoo Finance.
 yfinance
+
+# Machine Learning: The library containing the Random Forest algorithm for making predictions.
 scikit-learn
+
+# Data Processing: Used for handling data structures like DataFrames, essential for cleaning, manipulating, and preparing stock data.
 pandas
+
+# Scientific Computing: Provides high-performance array and mathematical operations, often used internally by pandas and scikit-learn.
 numpy
