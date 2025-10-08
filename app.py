@@ -174,60 +174,86 @@ def index():
 
     return render_template_string(
         """
-        <html>
-            <head>
-                <title>Stock Predictor</title>
-                <link rel="stylesheet"
-                      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-                <style>
-                    body { padding: 30px; }
-                    th, td { text-align: center; }
-                    .result-card { margin-top: 40px; }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <h3 class="text-center mb-4">Stock Prediction Dashboard</h3>
-                    <form method="POST" class="text-center mb-4">
-                        <div class="row justify-content-center">
-                            <div class="col-md-4">
-                                <select name="symbol" class="form-select">
-                                    {% for name, sym in stocks.items() %}
-                                        <option value="{{ sym }}"
-                                            {% if result and result.symbol == sym %}selected{% endif %}>
-                                            {{ name }} ({{ sym }})
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary w-100">Predict</button>
-                            </div>
-                        </div>
-                    </form>
+    <html>
+        <head>
+            <title>Stock Predictor</title>
+            <link rel="stylesheet"
+                  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+            <style>
+                body { padding: 30px; }
+                th, td { text-align: center; }
+                .result-card { margin-top: 40px; }
 
-                    {% if result %}
-                    <div class="card result-card shadow">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Report for {{ result.symbol }}</h5>
-                            <p><b>Trend:</b> {{ result.trend }}</p>
-                            <p><b>Current Price:</b> ₹{{ result.current_price }} ({{ result.date_now }})</p>
-                            <p><b>Predicted Price (Next 30 Days):</b> ₹{{ result.predicted_price }} ({{ result.future_date }})</p>
-                            <p><b>Price Difference:</b> ₹{{ result.price_difference }}</p>
-                            <p><b>Expected Return:</b> {{ result.profit_or_loss }}</p>
-                            <p><b>Entry Price:</b> {{ result.entry_price }}</p>
-                            <p><b>Stop Loss:</b> {{ result.stop_loss }}</p>
+                /* Loader overlay */
+                #loader-overlay {
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(255, 255, 255, 0.8);
+                    z-index: 9999;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="loader-overlay">
+                <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;"></div>
+                <p class="mt-3 fw-bold text-primary">Predicting...</p>
+            </div>
+
+            <div class="container">
+                <h3 class="text-center mb-4">Stock Prediction Dashboard</h3>
+                <form method="POST" class="text-center mb-4" onsubmit="showLoader()">
+                    <div class="row justify-content-center">
+                        <div class="col-md-4">
+                            <select name="symbol" class="form-select">
+                                {% for name, sym in stocks.items() %}
+                                    <option value="{{ sym }}"
+                                        {% if result and result.symbol == sym %}selected{% endif %}>
+                                        {{ name }} ({{ sym }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Predict</button>
                         </div>
                     </div>
+                </form>
 
-                    <div class="mt-4">
-                        <h5>Last 30 Days Data</h5>
-                        {{ table_html | safe }}
+                {% if result %}
+                <div class="card result-card shadow">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Report for {{ result.symbol }}</h5>
+                        <p><b>Trend:</b> {{ result.trend }}</p>
+                        <p><b>Current Price:</b> ₹{{ result.current_price }} ({{ result.date_now }})</p>
+                        <p><b>Predicted Price (Next 30 Days):</b> ₹{{ result.predicted_price }} ({{ result.future_date }})</p>
+                        <p><b>Price Difference:</b> ₹{{ result.price_difference }}</p>
+                        <p><b>Expected Return:</b> {{ result.profit_or_loss }}</p>
+                        <p><b>Entry Price:</b> {{ result.entry_price }}</p>
+                        <p><b>Stop Loss:</b> {{ result.stop_loss }}</p>
                     </div>
-                    {% endif %}
                 </div>
-            </body>
-        </html>
+
+                <div class="mt-4">
+                    <h5>Last 30 Days Data</h5>
+                    {{ table_html | safe }}
+                </div>
+                {% endif %}
+            </div>
+
+            <script>
+                function showLoader() {
+                    document.getElementById("loader-overlay").style.display = "flex";
+                }
+            </script>
+        </body>
+    </html>
     """,
         stocks=stocks,
         result=result,
@@ -241,7 +267,7 @@ if __name__ == "__main__":
     # app.run(debug=True)
 
     # Run using public IP
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    # app.run(host="0.0.0.0", port=5000, debug=True)
 
     # Hugging Face uses port 7860 by default
-    # app.run(host="0.0.0.0", port=7860)
+    app.run(host="0.0.0.0", port=7860)
